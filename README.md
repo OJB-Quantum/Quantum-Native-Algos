@@ -220,6 +220,15 @@ Quantum‑Native Simulation Techniques
 
 ## **Quantum‑Native Solver/ Simulation Techniques - Ordered by Hardware‑Readiness**  
 
+## Compact Version 
+
+| Tier | Typical depth/ qubits | Representative methods |
+| :--- | :--- | :--- |
+| I. NISQ-ready | Shallow circuits, few qubits (today's IBMQ Rigetti, IonQ) | Quantum walks, QLBM demos, VQS/QITE, tiny HHL demos, basic amplitude-estimation, minimal Lindblad simulators |
+| II. Near-term/ hybrid | Moderate error-correction, multi-circuit layouts | Multi-circuit QLBM, LDE oracles, tiny Q-FEM, prototype QMetropolis, quantum-accelerated Monte Carlo, photonic-co-processor variants |
+| III. Fault-tolerant eligible | Full error-corrected logical qubits, deep circuits | Full-scale HHL/ block-encoding, qubitized Dirac/Schrödinger Hamiltonians, QSVT-based PDE solvers, quantum-enhanced AMR, large-scale tensor-network simulation |
+
+## Extended Version
 
 ## I. NISQ‑ready (shallow‑depth, few‑qubit) techniques  
 These algorithms can be executed today on IBM Q, Rigetti, IonQ, or any other gate‑model device with error‑mitigation.  All required primitives are already available in Qiskit ≥ 2.2 (e.g. `QuantumWalkCircuit`, `VQSDynamics`, `QITE`, `AmplitudeEstimation`, `LindbladEvolution`).  
