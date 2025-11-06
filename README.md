@@ -1,4 +1,4 @@
-# Quantum-Native-Algos
+# Quantum-Native-Solvers
 A compilation of quantum-native solver techniques that can be used to map and run on a quantum computer. Compiled by Onri Jay Benally. 
 
 ---
