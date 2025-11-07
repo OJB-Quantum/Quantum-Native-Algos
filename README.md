@@ -3,6 +3,8 @@ A compilation of quantum-native solver techniques that can be used to map and ru
 
 [![License](https://img.shields.io/badge/Creative_Commons-License-green)](https://choosealicense.com/licenses/cc-by-4.0) 
 
+Primary URL for the repository: <https://github.com/OJB-Quantum/Quantum-Native-Solvers/>
+
 ---
 
 The purpose of this repository is to monitor computational techniques (over time) that can be used to determine whether a working mathematical or computational framework of interest may be eligible for quantum simulation. 
@@ -19,6 +21,8 @@ Interestingly, some models such as the [Landau-Lifshitz-Gilbert (LLG) equation](
 ---
 
 ## Classification Tree for Quantum-Native Solvers/ True Quantum Simulation 
+
+(A Quantum Simulation Taxonomy) 
 
 ```
 Quantum‑Native Simulation Techniques 
