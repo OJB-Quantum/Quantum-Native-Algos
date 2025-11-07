@@ -443,6 +443,56 @@ Fault‑tolerant heterogeneous/hybrid quantum system
 
 ---
 
+## Estimated Metrics for Qubit Count Per Example Technique 
+
+* **d = 7 → ~98 physical/logical** 
+* **d = 13 → ~338 physical/logical** 
+* *Occupancy mapping*: for 2D D2Q5, **5M² qubits** for an M×M lattice (one per discrete velocity population) 
+
+## A) Tier I - NISQ‑ready (physical qubits, shallow circuits)
+
+**Description:** Estimated qubit counts for methods that can be run on current NISQ hardware without error correction.
+
+| Method | Qubit estimate (today’s NISQ) | How the count was derived | Representative instance |
+|---|---|---|---|
+| Quantum walks | 6–14 qubits typical; formula ≈ ⌈log₂ N⌉ + 2 | Position register + coin + one small ancilla | N = 1,024 nodes → 10 (pos) + 1 (coin) + 1 (anc) = **12** |
+| QLBM demos – occupancy encoding | 5 M² qubits (scales with lattice size) | D2Q5 mapping: one qubit per discrete‑velocity population | M = 8 → 5 · 64 = **320** |
+| QLBM demos – amplitude‑encoded | ~10 qubits (≈9 data + 1 ancilla) | Amplitude/state‑encoding keeps width constant | Demonstrations use **9 + 1** qubits |
+| VQS/ QITE | 4–20 qubits | VQE chemistry demos: H₂ (4 q), LiH (12 q); QITE demos up to ~20 q | H₂ minimal basis (4 q), LiH frozen‑core (12 q) |
+| Tiny HHL demos | 4–8 qubits | Small 2×2–4×4 linear systems using QPE + ancillas | Early NMR/photonic/IBM‑style proofs of concept |
+| Basic amplitude estimation | 0–1 ancilla beyond problem registers | Low‑depth variants avoid large phase‑estimation registers | ML‑AE and IQAE use 0–1 extra qubit |
+| Minimal Lindblad simulators | 2–4 qubits for one system qubit + environment ancilla(s) | Stinespring/Kraus dilation for a single‑qubit channel | Amplitude damping on one qubit → **2** total; more channels add ancillas |
+
+
+## B) Tier II - Near‑term/Hybrid (logical qubits, modest error correction)
+
+**Description:** Logical‑qubit estimates for methods that employ modest error correction (e.g., surface‑code distance d = 7 or 13) and may involve multiple circuit stages.
+
+| Method | Algorithmic logical qubits (typical) | Physical qubits @ d = 7 | Physical qubits @ d = 13 | Reasoning |
+|---|---|---|---|---|
+| Multi‑circuit QLBM (amplitude‑encoded, with mid‑circuit measure/reset) | ~10–20 logical | ~980–1,960 | ~3,380–6,760 | Uses ~9 data + 1 ancilla kernel; multi‑circuit orchestration reuses the small kernel |
+| Linear‑differential‑equation (LDE) oracles in a QLSS/QSVT pipeline | n + 3–10 (n = log₂ grid DOFs) → e.g. ~32–64 logical | ~3,100–6,300 | ~10,800–21,600 | QLSS uses n algorithmic qubits plus ancillas for block‑encoding and QSP |
+| Tiny Q‑FEM prototypes (hybrid FEM + VQLS) | ~8–24 logical | ~784–2,352 | ~2,704–8,112 | Near‑term VQLS FEM and hybrid CFD/FEM demos show few‑to‑few‑dozen‑qubit runs |
+| Prototype QMetropolis/ QMS | n + r + 2–5 → ~24–64 logical | ~2,400–6,300 | ~8,100–21,600 | System register n, r‑bit energy precision, plus small ancillas for accept–reject |
+| Quantum‑accelerated Monte Carlo (QAE‑based risk/option demos, shallow variants) | 10–40 logical | ~980–3,920 | ~3,380–13,520 | Demos typically use 5–10 qubits for distributions, a payoff register, and 0–1 ancilla |
+| Photonic co‑processor variants | Not qubit‑encoded (modes/photons) | N/A | N/A | Photonic sampling/counting uses modes/photons rather than qubits; surface‑code overhead not applicable |
+
+
+## C) Tier III - Fault‑tolerant eligible (full error correction)
+
+**Description:** Logical‑qubit counts for fully fault‑tolerant algorithms, together with physical‑qubit totals for surface‑code distances d = 7 and d = 13.
+
+| Method | Representative problem & logical qubits | Physical @ d = 7 | Physical @ d = 13 | Notes |
+|---|---|---|---|---|
+| Full‑scale HHL/ block‑encoding linear solver | Sparse N = 2²⁰ (n = 20) with QSVT/QLSS → ~30–60 logical (20 data + 1–3 QSP ancillas + small oracles) | ~2,900–5,900 | ~10,100–20,300 | Low‑ancilla block‑encoding/QSP; depth/T‑count dominate cost |
+| Qubitized Dirac/ Schrödinger Hamiltonians | 3D grid 256³ → n = 24; qubitization ancillas → ~26–36 logical | ~2,500–3,500 | ~8,800–12,200 | Qubitization uses ≤2 ancillas; grid‑based demos confirm n in the 20–30 range |
+| QSVT‑based PDE solvers | Mixed FEM/PDE with QSP precision → ~40–80 logical | ~3,900–7,800 | ~13,500–27,000 | QSVT angles/LCU ancillas add O(1–log L) |
+| Quantum‑enhanced AMR | AMR error‑estimator loops + QLSS core → ~32–64 logical | ~3,100–6,300 | ~10,800–21,600 | Quantum error‑estimators via block‑encoding; toy VQLS AMR evaluators use 2–5 qubits (without EC) |
+| Large‑scale tensor‑network simulation (QTN on QC) | QTN/MPS with bond dimension χ = 64 → ~6–12 logical (log₂χ + ancillas) | ~590–1,180 | ~2,030–4,060 | Width independent of system size; depth and sampling control accuracy |
+| Quantum‑accelerated Monte Carlo (finance, fault‑tolerant) | End‑to‑end estimates: ~4.7k–8k logical; T‑count ≈10⁸–10⁹ | ~4.6 × 10⁵–7.8 × 10⁵ | ~1.6 × 10⁶–2.7 × 10⁶ | QSP‑based payoff loading reduces logical width to ~4.7k; factories and clock rate dominate schedule |
+
+---
+
 ## References
 
 1.  Wang, B., Meng, Z., Zhao, Y. and Yang, Y. (2025) *Quantum lattice Boltzmann method for simulating nonlinear fluid dynamics*. \[Preprint]. arXiv:2502.16568. Available at: [https://arxiv.org/abs/2502.16568](https://arxiv.org/abs/2502.16568).
@@ -457,7 +507,7 @@ Fault‑tolerant heterogeneous/hybrid quantum system
 10. Low, G.H. and Chuang, I.L. (2017) 'Optimal Hamiltonian simulation by quantum signal processing', *Physical Review Letters*, 118(1), 010501. Available at: [https://doi.org/10.1103/PhysRevLett.118.010501](https://doi.org/10.1103/PhysRevLett.118.010501).
 11. Childs, A.M., Kothari, R. and Somma, R.D. (2017) 'Quantum algorithm for linear systems of equations with exponentially improved dependence on precision', *SIAM Journal on Computing*, 46(6), pp. 1920–1950. Available at: [https://doi.org/10.1137/16M1087072](https://doi.org/10.1137/16M1087072).
 12. Brassard, G., Høyer, P., Mosca, M. and Tapp, A. (2002) 'Quantum amplitude amplification and estimation', *Quantum Information & Computation*, 2(1), pp. 53–74. Available at: [https://arxiv.org/abs/quant-ph/0005055](https://arxiv.org/abs/quant-ph/0005055).
-13. Suzuki, S., et al. (2021) 'Real- and imaginary-time evolution with compressed quantum circuits', *PRX Quantum*, 2(1), 010342. Available at: [https://doi.org/10.1103/PRXQuantum.2.010342](https://www.google.com/search?q=https://doi.org/10.1103/PRXQuantum.2.010342).
+13. Suzuki, S., et al. (2021) 'Real- and imaginary-time evolution with compressed quantum circuits', *PRX Quantum*, 2(1), 010342. Available at: [https://doi.org/10.1103/PRXQuantum.2.010342](https://doi.org/10.1103/PRXQuantum.2.010342).
 14. McArdle, S., et al. (2020) 'Variational quantum simulation of general processes', *Physical Review Letters*, 125(1), 010501. Available at: [https://doi.org/10.1103/PhysRevLett.125.010501](https://doi.org/10.1103/PhysRevLett.125.010501).
 15. Kuroiwa, K., Ohkuma, T., Sato, H. and Imai, R. (2022) *Quantum Car-Parrinello molecular dynamics: A cost-efficient molecular simulation method on near-term quantum computers*. \[Preprint]. arXiv:2212.11921. Available at: [https://arxiv.org/abs/2212.11921](https://arxiv.org/abs/2212.11921).
 16. Arrighi, P., Forets, M. and Nesme, V. (2014) 'The Dirac equation as a quantum walk: higher dimensions, observational convergence', *Journal of Physics A: Mathematical and Theoretical*, 47(46), 465302. Available at: [https://doi.org/10.1088/1751-8113/47/46/465302](https://doi.org/10.1088/1751-8113/47/46/465302).
@@ -474,27 +524,28 @@ Fault‑tolerant heterogeneous/hybrid quantum system
 27. Yu, Y. (2025) *Schrödingerization based quantum algorithms for the fractional Poisson equation*. \[Preprint]. arXiv:2505.01602. Available at: [https://arxiv.org/abs/2505.01602](https://arxiv.org/abs/2505.01602).
 28. Ayral, T. (2025) *Dynamical mean-field theory with quantum computing*. \[Preprint]. arXiv:2508.00118. Available at: [https://arxiv.org/abs/2508.00118](https://arxiv.org/abs/2508.00118).
 29. Georgescu, C.A. (2024) *Quantum Algorithms for the Lattice Boltzmann Method: Encoding and Evolution*. PhD thesis, TU Delft. Available at: [https://resolver.tudelft.nl/a7b20729-46b7-42d1-aaf7-c001fc93efd9](https://resolver.tudelft.nl/a7b20729-46b7-42d1-aaf7-c001fc93efd9).
-    3In. Klco, N., Savage, M.J. and Stryker, J.R. (2020) 'SU(2) non-Abelian gauge field theory in one dimension on digital quantum computers', *Physical Review D*, 101(7), 074512. Available at: [https://doi.org/10.1103/PhysRevD.101.074512](https://doi.org/10.1103/PhysRevD.101.074512).
-30. García-Molina, P., Rodríguez-Mediavilla, J. and García-Ripoll, J.J. (2022) 'Quantum Fourier analysis for multivariate functions and applications to a class of Schrödinger-type partial differential equations', *Physical Review A*, 105(1), 012433. Available at: [https://doi.org/10.1103/PhysRevA.105.012433](https://doi.org/10.1103/PhysRevA.105.012433).
-31. Kyriienko, O. (2023) *Quantum Chebyshev transform: mapping, embedding, learning and sampling distributions*. \[Preprint]. arXiv:2306.17026. Available at: [https://arxiv.org/abs/2306.17026](https://arxiv.org/abs/2306.17026).
-32. Zhao, T., et al. (2022) *Quantum-inspired variational algorithms for partial differential equations: application to financial derivative pricing*. \[Preprint]. arXiv:2207.10838. Available at: [https://arxiv.org/abs/2207.10838](https://arxiv.org/abs/2207.10838).
-33. Zhou, Y., et al. (2024) *Quantum algorithm for partial differential equations of non-conservative systems with spatially varying parameters*. \[Preprint]. arXiv:2407.05019. Available at: [https://arxiv.org/abs/2407.05019](https://arxiv.org/abs/2407.05019).
-34. Foulkes, W.M.C., Mitas, L., Needs, R.J. and Rajagopal, G. (2001) 'Quantum Monte Carlo simulations of solids', *Reviews of Modern Physics*, 73(1), pp. 33–83. Available at: [https://doi.org/10.1103/RevModPhys.73.33](https://doi.org/10.1103/RevModPhys.73.33).
-35. Stenger, M., et al. (2022) *Quantum algorithms for uncertainty quantification: application to partial differential equations*. \[Preprint]. arXiv:2209.11220. Available at: [https://arxiv.org/abs/2209.11220](https://arxiv.org/abs/2209.11220).
-36. Bianucci, P., Miquel, C., Paz, J.P. and Saraceno, M. (2001) *Discrete Wigner functions and the phase-space representation of quantum computers*. \[Preprint]. arXiv:quant-ph/0106091. Available at: [https://arxiv.org/abs/quant-ph/0106091](https://arxiv.org/abs/quant-ph/0106091).
-37. Kitaev, A.Y. (1995) *Quantum measurements and the Abelian stabilizer problem*. \[Preprint]. arXiv:quant-ph/9511026. Available at: [https://arxiv.org/abs/quant-ph/9511026](https://arxiv.org/abs/quant-ph/9511026).
-38. Arute, F., et al. (2019) 'Quantum supremacy using a programmable superconducting processor', *Nature*, 574, pp. 505–510. Available at: [https://doi.org/10.1038/s41586-019-1666-5](https://doi.org/10.1038/s41586-019-1666-5).
-39. Lloyd, S. (1996) 'Universal quantum simulators', *Science*, 273(5278), pp. 1073–1078. Available at: [https://doi.org/10.1126/science.273.5278.1073](https://doi.org/10.1126/science.273.5278.1073).
-40. Bausch, J., et al. (2023) *Quantum algorithms for fractional-order operators*. \[Preprint]. arXiv:2303.06703. Available at: [https://arxiv.org/abs/2303.06703](https://arxiv.org/abs/2303.06703).
-41. Brown, K.R., et al. (2021) 'Quantum algorithms for PDEs: a review', *Frontiers in Physics*, 9, 667392. Available at: [https://doi.org/10.3389/fphy.2021.667392](https://doi.org/10.3389/fphy.2021.667392).
-42. Barends, R., et al. (2014) 'Superconducting quantum circuits at the surface code threshold for fault tolerance', *Nature*, 508, pp. 500–503. Available at: [https://doi.org/10.1038/nature13171](https://doi.org/10.1038/nature13171).
-43. Rotentg, M., et al. (2022) 'Quantum-accelerated stochastic differential equations', *Quantum*, 6, 805. Available at: [https://doi.org/10.22331/q-2022-06-09-805](https://doi.org/10.22331/q-2022-06-09-805).
-44. Gottesman, D. (1998) *The Heisenberg representation of quantum computers*. \[Preprint]. arXiv:quant-ph/9807006. Available at: [https://arxiv.org/abs/quant-ph/9807006](https://arxiv.org/abs/quant-ph/9807006).
-45. Babbush, R., et al. (2018) 'Low-depth quantum simulation of materials', *Physical Review X*, 8(1), 011044. Available at: [https://doi.org/10.1103/PhysRevX.8.011044](https://doi.org/10.1103/PhysRevX.8.011044).
-46. Syamlal, M., Copen, C., Takahashi, M. and Hall, B. (2024) *Computational Fluid Dynamics on Quantum Computers*. \[Preprint]. arXiv:2406.18749. Available at: [https://arxiv.org/abs/2406.18749](https://arxiv.org/abs/2406.18749).
-47. Penuel, J., et al. (2024) *Feasibility of accelerating incompressible computational fluid dynamics simulations with fault-tolerant quantum computers*. \[Preprint]. arXiv:2406.06323. Available at: [https://arxiv.org/abs/2406.06323](https://arxiv.org/abs/2406.06323).
-48. Li, J., et al. (2025) *Multi-set variational quantum dynamics algorithm for simulating nonadiabatic dynamics on quantum computers*. \[Preprint]. arXiv:2503.07388. Available at: [https://arxiv.org/abs/2503.07388](https://arxiv.org/abs/2503.07388).
+30. In. Klco, N., Savage, M.J. and Stryker, J.R. (2020) 'SU(2) non-Abelian gauge field theory in one dimension on digital quantum computers', *Physical Review D*, 101(7), 074512. Available at: [https://doi.org/10.1103/PhysRevD.101.074512](https://doi.org/10.1103/PhysRevD.101.074512).
+31. García-Molina, P., Rodríguez-Mediavilla, J. and García-Ripoll, J.J. (2022) 'Quantum Fourier analysis for multivariate functions and applications to a class of Schrödinger-type partial differential equations', *Physical Review A*, 105(1), 012433. Available at: [https://doi.org/10.1103/PhysRevA.105.012433](https://doi.org/10.1103/PhysRevA.105.012433).
+32. Kyriienko, O. (2023) *Quantum Chebyshev transform: mapping, embedding, learning and sampling distributions*. \[Preprint]. arXiv:2306.17026. Available at: [https://arxiv.org/abs/2306.17026](https://arxiv.org/abs/2306.17026).
+33. Zhao, T., et al. (2022) *Quantum-inspired variational algorithms for partial differential equations: application to financial derivative pricing*. \[Preprint]. arXiv:2207.10838. Available at: [https://arxiv.org/abs/2207.10838](https://arxiv.org/abs/2207.10838).
+34. Zhou, Y., et al. (2024) *Quantum algorithm for partial differential equations of non-conservative systems with spatially varying parameters*. \[Preprint]. arXiv:2407.05019. Available at: [https://arxiv.org/abs/2407.05019](https://arxiv.org/abs/2407.05019).
+35. Foulkes, W.M.C., Mitas, L., Needs, R.J. and Rajagopal, G. (2001) 'Quantum Monte Carlo simulations of solids', *Reviews of Modern Physics*, 73(1), pp. 33–83. Available at: [https://doi.org/10.1103/RevModPhys.73.33](https://doi.org/10.1103/RevModPhys.73.33).
+36. Stenger, M., et al. (2022) *Quantum algorithms for uncertainty quantification: application to partial differential equations*. \[Preprint]. arXiv:2209.11220. Available at: [https://arxiv.org/abs/2209.11220](https://arxiv.org/abs/2209.11220).
+37. Bianucci, P., Miquel, C., Paz, J.P. and Saraceno, M. (2001) *Discrete Wigner functions and the phase-space representation of quantum computers*. \[Preprint]. arXiv:quant-ph/0106091. Available at: [https://arxiv.org/abs/quant-ph/0106091](https://arxiv.org/abs/quant-ph/0106091).
+38. Kitaev, A.Y. (1995) *Quantum measurements and the Abelian stabilizer problem*. \[Preprint]. arXiv:quant-ph/9511026. Available at: [https://arxiv.org/abs/quant-ph/9511026](https://arxiv.org/abs/quant-ph/9511026).
+39. Arute, F., et al. (2019) 'Quantum supremacy using a programmable superconducting processor', *Nature*, 574, pp. 505–510. Available at: [https://doi.org/10.1038/s41586-019-1666-5](https://doi.org/10.1038/s41586-019-1666-5).
+40. Lloyd, S. (1996) 'Universal quantum simulators', *Science*, 273(5278), pp. 1073–1078. Available at: [https://doi.org/10.1126/science.273.5278.1073](https://doi.org/10.1126/science.273.5278.1073).
+41. Bausch, J., et al. (2023) *Quantum algorithms for fractional-order operators*. \[Preprint]. arXiv:2303.06703. Available at: [https://arxiv.org/abs/2303.06703](https://arxiv.org/abs/2303.06703).
+42. Brown, K.R., et al. (2021) 'Quantum algorithms for PDEs: a review', *Frontiers in Physics*, 9, 667392. Available at: [https://doi.org/10.3389/fphy.2021.667392](https://doi.org/10.3389/fphy.2021.667392).
+43. Barends, R., et al. (2014) 'Superconducting quantum circuits at the surface code threshold for fault tolerance', *Nature*, 508, pp. 500–503. Available at: [https://doi.org/10.1038/nature13171](https://doi.org/10.1038/nature13171).
+44. Rotentg, M., et al. (2022) 'Quantum-accelerated stochastic differential equations', *Quantum*, 6, 805. Available at: [https://doi.org/10.22331/q-2022-06-09-805](https://doi.org/10.22331/q-2022-06-09-805).
+45. Gottesman, D. (1998) *The Heisenberg representation of quantum computers*. \[Preprint]. arXiv:quant-ph/9807006. Available at: [httpsfs://arxiv.org/abs/quant-ph/9807006](https://www.google.com/search?q=httpsfs://arxiv.org/abs/quant-ph/9807006).
+46. Babbush, R., et al. (2018) 'Low-depth quantum simulation of materials', *Physical Review X*, 8(1), 011044. Available at: [https://doi.org/10.1103/PhysRevX.8.011044](https://doi.org/10.1103/PhysRevX.8.011044).
+47. Syamlal, M., Copen, C., Takahashi, M. and Hall, B. (2024) *Computational Fluid Dynamics on Quantum Computers*. \[Preprint]. arXiv:2406.18749. Available at: [https://arxiv.org/abs/2406.18749](https://arxiv.org/abs/2406.18749).
+48. Penuel, J., et al. (2024) *Feasibility of accelerating incompressible computational fluid dynamics simulations with fault-tolerant quantum computers*. \[Preprint]. arXiv:2406.06323. Available at: [https://arxiv.org/abs/2406.06323](https://arxiv.org/abs/2406.06323).
+    4s9. Li, J., et al. (2025) *Multi-set variational quantum dynamics algorithm for simulating nonadiabatic dynamics on quantum computers*. \[Preprint]. arXiv:2503.07388. Available at: [https://arxiv.org/abs/2503.07388](https://arxiv.org/abs/2503.07388).
 49. Duriez, A., et al. (2025) *Computing band gaps of periodic materials via sample-based quantum diagonalization*. \[Preprint]. arXiv:2503.10901. Available at: [https://arxiv.org/abs/2503.10901](https://arxiv.org/abs/2503.10901).
-50. Arora, A., Ward, B.M. and Oskay, C. (2024) *An implementation of the finite element method in hybrid classical/quantum computers*. \[Preprint]. arXiv:2411.09038. Available at: [https://arxiv.org/abs/2411.09038](https://arxiv.org/abs/2411.09038).
+50. Arora, A., Ward, B.M. and Oskay, C. (2s024) *An implementation of the finite element method in hybrid classical/quantum computers*. \[Preprint]. arXiv:2411.09038. Available at: [https://arxiv.org/abs/2411.09038](https://arxiv.org/abs/2411.09038).
 51. Ghisoni, F., Scala, F., Bajoni, D. and Gerace, D. (2024) *Shadow quantum linear solver: A resource-efficient quantum algorithm for linear systems of equations*. \[Preprint]. arXiv:2409.08929. Available at: [https://arxiv.org/abs/2409.08929](https://arxiv.org/abs/2409.08929).
-52. Kahanamoku-Meyer, G.D. (2023) *Exploring the Limits of Classical Simulation: From Computational Many-Body Dynamics to Quantum Advantage*. PhD thesis, University of California, Berkeley. Available at: [https://gregkm.me/files/Kahanamoku-Meyer\_dissertation.pdf](https://gregkm.me/files/Kahanamoku-Meyer_dissertation.pdf). 
+52. Kahanamoku-Meyer, G.D. (2023) *Exploring the Limits of Classical Simulation: From Computational Many-Body Dynamics to Quantum Advantage*. PhD thesis, University of California, Berkeley. Available at: [https://gregkm.me/files/Kahanamoku-Meyer\_dissertation.pdf](https://gregkm.me/files/Kahanamoku-Meyer_dissertation.pdf).
+53. Beverland, M.E. *et al.* (2022) *Assessing requirements to scale to practical quantum advantage*. \[Preprint]. arXiv:2211.07629 Available at: [https://doi.org/10.48550/arXiv.2211.07629](https://doi.org/10.48550/arXiv.2211.07629).
