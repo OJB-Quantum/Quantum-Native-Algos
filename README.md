@@ -64,9 +64,28 @@ Quantum‑Native Simulation Techniques
 │   ├─ N. Variational Dirac solvers
 │   │   ├─ N1. Real‑time VQS for Dirac spinor dynamics
 │   │   └─ N2. QITE for massive Dirac ground‑state preparation
-│   └─ O. Variational Schrödinger solvers
-│       ├─ O1. Real‑time VQS with hardware‑efficient ansätze for non‑relativistic dynamics
-│       └─ O2. Imaginary‑time VQS/ QITE for ground‑state Schrödinger problems
+│   ├─ O. Variational Schrödinger solvers
+│   │   ├─ O1. Real‑time VQS with hardware‑efficient ansätze for non‑relativistic dynamics
+│   │   └─ O2. Imaginary‑time VQS/ QITE for ground‑state Schrödinger problems
+│   └─ P. Thermo‑Field‑Double (TFD) & Finite‑Temperature Variational Methods  ← NEW
+│       ├─ P1. QAOA‑style alternating‑operator TFD preparation (intersystem entangler + H) 
+│       │       — finite‑temperature Gibbs states via depth‑p cooling schedules
+│       │       — early trapped‑ion and superconducting demonstrations
+│       ├─ P2. H_TFD‑ground‑state VQE (engineered H_TFD whose ground state ≈ |TFD(β)⟩)
+│       │       — SYK‑model implementations; scalable to interacting fermions
+│       ├─ P3. Variational Quantum Thermalizer (VQT), free‑energy minimization
+│       │       — entropy estimation via series/auxiliary models; high‑T guarantees
+│       ├─ P4. TFD‑QITE / imaginary‑time purification (unitary approximants to e^{-βH/2})
+│       │       — purely unitary circuits with ancilla‑assisted updates
+│       ├─ P5. TFD‑VQS for dynamical correlators & spectroscopy 
+│       │       — finite‑T C(t), optical/UV‑vis spectra, non‑equilibrium quenches
+│       ├─ P6. Width‑reduction via entanglement forging / circuit‑cutting
+│       │       — simulate a 2N‑qubit TFD using width‑N circuits
+│       ├─ P7. Gauge‑theory & holographic/SYK TFD variants 
+│       │       — lattice‑gauge finite‑T phases; wormhole/OTO‑correlator‑motivated targets
+│       ├─ P8. Noise‑aware TFD compilation & error‑mitigation
+│       │       — noise thresholds favoring shallow QAOA‑TFD; noise‑assisted thermalization
+│       └─ P9. Non‑TFD thermal comparators (PSA, canonical TPQ states) for benchmarking
 │
 ├─ IV. Hamiltonian Simulation & Scattering
 │   ├─ P. Real‑space electron‑dynamics (LCU/ qubitization/ Trotter)
